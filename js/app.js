@@ -28,9 +28,41 @@ function diceRoll() {
   document.getElementById("second-die").className = secondDie;
 }
 
+function asyncRoll() {
+  return new Promise((resovle, reject) => {
+    diceRoll();
+
+    const timeOut = Math.floor(Math.random() * 100 + 150);
+
+    setTimeout(resovle, timeOut);
+  });
+}
+
+function rollSeries() {
+  let count = Math.floor(Math.random() * 6 + 2);
+  count = Math.min(count, 5);
+
+  const doIt = () => {
+    asyncRoll().then(() => {
+      count--;
+
+      if (count >= 0) {
+        doIt();
+      } else {
+        //
+      }
+    });
+  };
+
+  if (count >= 0) {
+    doIt();
+  }
+}
+
 // Use this to trigger a diceRoll function that you must define
-document.getElementById("roll-dice").onclick = diceRoll;
+document.getElementById("roll-dice").onclick = rollSeries;
 
-document.getElementById("first-die").onclick = diceRoll;
+document.getElementById("first-die").onclick = rollSeries;
 
-diceRoll();
+// diceRoll();
+rollSeries();
